@@ -1,0 +1,6 @@
+{
+  "bingo_lobby.action.reachCheckpoint": "reached parkour checkpoint %d",
+  "bingo_lobby.scoreboard.parkourCheckpoint": "Parkour Checkpoint",
+  "bingo_lobby.resumeparkour.missingCheckpointLocation": "missing checkpoint location for checkpoint %d",
+  "bingo_lobby.resumeparkour.info": "run %s to return to the lobby"
+}

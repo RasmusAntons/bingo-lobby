@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "de.rasmusantons.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"BedBlockMixin",
+		"ServerPlayerMixin",
+		"ServerGamePacketListenerImplMixin",
+		"NetherPortalBlockMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

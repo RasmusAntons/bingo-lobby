@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.ReadOnlyScoreInfo;
 import net.minecraft.world.scores.ScoreAccess;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,7 +34,7 @@ import static de.rasmusantons.BingoLobby.PARKOUR_LEVEL_KEY;
 public class BedBlockMixin {
 	@Inject(at = @At("HEAD"), method = "useWithoutItem", cancellable = true)
 	private void onUseWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
-		if (!(player instanceof ServerPlayer serverPlayer) || serverPlayer.gameMode.getGameModeForPlayer() != GameType.ADVENTURE || !level.getGameRules().getRule(BINGO_LOBBY).get()) {
+		if (!(player instanceof ServerPlayer serverPlayer) || serverPlayer.gameMode.getGameModeForPlayer() != GameType.ADVENTURE || !serverPlayer.serverLevel().getGameRules().getRule(BINGO_LOBBY).get()) {
 			return;
 		}
 		if (blockState.getValue(BedBlock.PART) == BedPart.HEAD) {

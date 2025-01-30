@@ -5,13 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
 import net.minecraft.network.protocol.game.ClientboundHurtAnimationPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.ReadOnlyScoreInfo;
@@ -56,6 +52,7 @@ public class Utils {
                 continue;
             }
             player.teleportTo(checkpointPosition.getX() + 0.5, checkpointPosition.getY() + 0.8, checkpointPosition.getZ() + 0.5);
+            player.setCamera(player);
             player.connection.send(new ClientboundHurtAnimationPacket(player));
             player.setRemainingFireTicks(0);
             player.resetFallDistance();

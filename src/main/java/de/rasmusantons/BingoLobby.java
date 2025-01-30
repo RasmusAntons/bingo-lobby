@@ -24,7 +24,7 @@ public class BingoLobby implements ModInitializer {
 	public void onInitialize() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, context, environment) -> BingoLobbyCommands.register(dispatcher));
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-			if (handler.player.level().getGameRules().getRule(BINGO_LOBBY).get()) {
+			if (handler.player.serverLevel().getGameRules().getRule(BINGO_LOBBY).get()) {
 				handler.player.setGameMode(GameType.ADVENTURE);
 			}
 		});

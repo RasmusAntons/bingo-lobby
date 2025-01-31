@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundHurtAnimationPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.ReadOnlyScoreInfo;
 
@@ -51,8 +52,7 @@ public class Utils {
                 player.sendSystemMessage(Utils.addFallback(Component.translatable("bingo_lobby.resumeparkour.missingCheckpointLocation", checkpointNumber)));
                 continue;
             }
-            player.teleportTo(checkpointPosition.getX() + 0.5, checkpointPosition.getY() + 0.8, checkpointPosition.getZ() + 0.5);
-            player.setCamera(player);
+            player.teleportTo(player.serverLevel(), checkpointPosition.getX(), checkpointPosition.getY(), checkpointPosition.getZ(), Relative.ROTATION, 0, 0, true);
             player.connection.send(new ClientboundHurtAnimationPacket(player));
             player.setRemainingFireTicks(0);
             player.resetFallDistance();

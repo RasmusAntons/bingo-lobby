@@ -1,1 +1,1 @@
-$bingo start --gamemode bingo:lockout --allow-never-goals-in-lockout --size $(size) --difficulty $(difficulty) --require-client --include-inactive-teams --auto-forfeit-time -1 --time $(timelimit) $(team1)
+$bingo start --gamemode bingo:lockout --allow-never-goals-in-lockout --size $(size) --difficulty $(difficulty) --require-client --include-inactive-teams --auto-forfeit-time -1 --exclude-tag $(nopvp) --time-limit $(timelimit)s $(team1)

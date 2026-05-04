@@ -2,10 +2,12 @@ package de.rasmusantons;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.network.protocol.game.ClientboundHurtAnimationPacket;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -52,17 +54,20 @@ public class Utils {
                 player.sendSystemMessage(Utils.addFallback(Component.translatable("bingo_lobby.resumeparkour.missingCheckpointLocation", checkpointNumber)));
                 continue;
             }
-            player.teleportTo(player.serverLevel(), checkpointPosition.getX(), checkpointPosition.getY(), checkpointPosition.getZ(), Relative.ROTATION, 0, 0, true);
+            player.teleportTo(player.level(), checkpointPosition.getX(), checkpointPosition.getY(), checkpointPosition.getZ(), Relative.ROTATION, 0, 0, true);
             player.connection.send(new ClientboundHurtAnimationPacket(player));
             player.setRemainingFireTicks(0);
             player.resetFallDistance();
             player.setOnGround(true);
             player.setHealth(player.getMaxHealth());
-            player.playNotifySound(SoundEvents.PLAYER_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+            player.connection.send(new ClientboundSoundEntityPacket(
+                    Holder.direct(SoundEvents.PLAYER_TELEPORT), player.getSoundSource(),
+                    player, 1f, 1f, player.getRandom().nextLong()
+            ));
             var commandComponent = Component.literal("/quitparkour").withStyle(Style.EMPTY
                     .withBold(true)
                     .withColor(ChatFormatting.LIGHT_PURPLE)
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/quitparkour"))
+                    .withClickEvent(new ClickEvent.RunCommand("/quitparkour"))
             );
             player.sendSystemMessage(Utils.addFallback(Component.translatable("bingo_lobby.resumeparkour.info", commandComponent)));
         }

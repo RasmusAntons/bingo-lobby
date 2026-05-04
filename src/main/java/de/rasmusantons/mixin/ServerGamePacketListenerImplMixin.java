@@ -18,10 +18,10 @@ public class ServerGamePacketListenerImplMixin {
     @Shadow public ServerPlayer player;
 
     @Inject(method = "handleMovePlayer", at = @At("TAIL"), cancellable = true)
-    private void onMove(ServerboundMovePlayerPacket serverboundMovePlayerPacket, CallbackInfo ci) {
-        if (this.player.fallDistance > 5 && this.player.serverLevel().getGameRules().getBoolean(BingoLobby.BINGO_LOBBY)) {
+    private void onMove(ServerboundMovePlayerPacket packet, CallbackInfo ci) {
+        if (this.player.fallDistance > 5 && this.player.level().getGameRules().get(BingoLobby.BINGO_LOBBY)) {
             if (this.player.getY() < -64) {
-                Utils.resumeParkour(this.player.serverLevel(), List.of(this.player));
+                Utils.resumeParkour(this.player.level(), List.of(this.player));
             }
         }
         ci.cancel();

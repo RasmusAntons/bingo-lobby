@@ -18,9 +18,9 @@ import java.util.List;
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin {
     @Inject(method = "getPortalDestination", at = @At("HEAD"), cancellable = true)
-    private void onUse(ServerLevel serverLevel, Entity entity, BlockPos blockPos, CallbackInfoReturnable<TeleportTransition> cir) {
-        if (entity instanceof ServerPlayer serverPlayer && serverPlayer.serverLevel().getGameRules().getBoolean(BingoLobby.BINGO_LOBBY)) {
-            Utils.resumeParkour(serverPlayer.serverLevel(), List.of(serverPlayer));
+    private void onUse(ServerLevel currentLevel, Entity entity, BlockPos portalEntryPos, CallbackInfoReturnable<TeleportTransition> cir) {
+        if (entity instanceof ServerPlayer serverPlayer && serverPlayer.level().getGameRules().get(BingoLobby.BINGO_LOBBY)) {
+            Utils.resumeParkour(serverPlayer.level(), List.of(serverPlayer));
             cir.setReturnValue(null);
         }
     }

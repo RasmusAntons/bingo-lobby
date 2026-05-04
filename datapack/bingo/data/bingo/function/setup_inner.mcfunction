@@ -23,7 +23,7 @@ $execute if data storage bingo:vars {teamPurple: "purple"} at @p[gamemode=!spect
 $execute if data storage bingo:vars {teamBlack: "black"} at @p[gamemode=!spectator,team=black] run function bingo:init_team {team: "black", bonus_chest: "$(bonus_chest)", seed: $(seed), consistent: "$(consistent)"}
 $execute if data storage bingo:vars {teamWhite: "white"} at @p[gamemode=!spectator,team=white] run function bingo:init_team {team: "white", bonus_chest: "$(bonus_chest)", seed: $(seed), consistent: "$(consistent)"}
 function bingo:freezeplayers with storage bingo:vars
-execute at @r[gamemode=!spectator] run bingogamerule givePlayerTracker true
+execute at @r[gamemode=!spectator] run bingogamerule playertracker:give_player_tracker true
 clear @a[gamemode=!spectator]
 xp set @a[gamemode=!spectator] 0
 xp set @a[gamemode=!spectator] 0 levels

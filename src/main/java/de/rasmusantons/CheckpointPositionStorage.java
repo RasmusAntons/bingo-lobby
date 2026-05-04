@@ -1,17 +1,40 @@
 package de.rasmusantons;
 
+import com.mojang.serialization.Codec;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CheckpointPositionStorage extends SavedData {
-    private final Map<Integer, BlockPos> checkpointPositions = new HashMap<>();
+    public static final Codec<CheckpointPositionStorage> CODEC  = Codec.unboundedMap(Codec.INT, BlockPos.CODEC)
+            .fieldOf("checkpoint_positions")
+            .codec()
+            .xmap(CheckpointPositionStorage::new, CheckpointPositionStorage::getCheckpointPositions);
+
+    public static final SavedDataType<CheckpointPositionStorage> TYPE = new SavedDataType<>(
+            Identifier.fromNamespaceAndPath(BingoLobby.MOD_ID, "checkpoint_positions"),
+            CheckpointPositionStorage::new,
+            CODEC,
+            null
+    );
+
+    private final Map<Integer, BlockPos> checkpointPositions = new Int2ObjectOpenHashMap<>();
+
+    private CheckpointPositionStorage() {
+    }
+
+    private CheckpointPositionStorage(Map<Integer, BlockPos> checkpointPositions) {
+
+    }
+
+    private Map<Integer, BlockPos> getCheckpointPositions() {
+        return checkpointPositions;
+    }
 
     public void set(int checkpointNumber, BlockPos pos) {
         BlockPos oldValue = checkpointPositions.get(checkpointNumber);
@@ -25,28 +48,7 @@ public class CheckpointPositionStorage extends SavedData {
         return checkpointPositions.get(checkpointNumber);
     }
 
-    @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        for (Map.Entry<Integer, BlockPos> entry : checkpointPositions.entrySet()) {
-            BlockPos pos = entry.getValue();
-            tag.putIntArray(entry.getKey().toString(), new int[]{pos.getX(), pos.getY(), pos.getZ()});
-        }
-        return tag;
-    }
-
-    public static CheckpointPositionStorage createFromTag(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        CheckpointPositionStorage store = new CheckpointPositionStorage();
-        for (String key : tag.getAllKeys()) {
-            int checkpointNumber = Integer.parseInt(key);
-            int[] pos = tag.getIntArray(key);
-            store.checkpointPositions.put(checkpointNumber, new BlockPos(pos[0], pos[1], pos[2]));
-        }
-        return store;
-    }
-
-    private static final Factory<CheckpointPositionStorage> factory = new Factory<>(CheckpointPositionStorage::new, CheckpointPositionStorage::createFromTag, null);
-
     public static CheckpointPositionStorage getStorage(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(factory, BingoLobby.MOD_ID);
+        return level.getDataStorage().computeIfAbsent(TYPE);
     }
 }

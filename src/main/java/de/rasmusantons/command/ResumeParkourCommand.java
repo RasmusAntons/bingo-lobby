@@ -2,10 +2,10 @@ package de.rasmusantons.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.rasmusantons.Utils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ public class ResumeParkourCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("resumeparkour")
-                        .requires(source -> source.hasPermission(2))
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(ctx -> resumeParkour(ctx.getSource()))
                         .then(argument("players", players())
                                 .executes(ctx -> resumeParkour(ctx.getSource(), getPlayers(ctx, "players")))

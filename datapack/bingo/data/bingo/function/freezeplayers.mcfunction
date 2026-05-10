@@ -1,1 +1,1 @@
-$freezeplayers @a[gamemode=!spectator] $(freezetime) true
+$freezeplayers @a[gamemode=!spectator] $(freezetime)s true

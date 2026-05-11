@@ -1,4 +1,5 @@
 clear @a
+freezeplayers @a cancel
 gamemode adventure @a
 teamspawnpoint white
 teamspawnpoint red
